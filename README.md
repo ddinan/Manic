@@ -8,15 +8,15 @@ A Minecraft Classic client written in JavaScript, utilising WebSocket (Classic s
 How do I use it?
 ================
 
-Start up a local web server pointed at `/htdocs`. I like using PHP 5.4's built-in webserver:
+Start up a local web server pointed at `/src`. I like using PHP 5.4's built-in webserver:
 
-    $ cd htdocs
+    $ cd src
     $ php -S localhost:8000
 
 Next, you'll need to run a Minecraft server. I'm using the [official Minecraft Classic server](https://minecraft.net/classic/list) which is long-outdated and can't even send heartbeats these days, but it's a good compatibility test. It is started like so:
 
     $ java -Xms512M -Xmx512M -cp minecraft-server.jar com.mojang.minecraft.server.MinecraftServer
-    
+
 Make sure you disable heartbeats and name protection in `server.properties`:
 
     public=false
@@ -25,7 +25,7 @@ Make sure you disable heartbeats and name protection in `server.properties`:
 Finally, we use a WebSocket-to-TCP bridge. I'm using the, quite frankly, rubbish [ws-tcp-bridge](https://github.com/andrewchambers/ws-tcp-bridge) which has a habit of crashing whenever it loses connection. Still, good enough for local testing. It can used like this to proxy localhost WebSocket traffic on port 25566 (currently the hard-wired server in the client) from the TCP Minecraft Classic server port 25565:
 
     $ ws-tcp-bridge --lport 25566 --rhost localhost:25565 --method ws2tcp
-    
+
 OK, but is it worth using?
 ==========================
 

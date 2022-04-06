@@ -22,7 +22,6 @@
 }
 
 /* Loading screen */
-
 #gui {
     background-image: url(background.png);
     text-align: center;
@@ -58,9 +57,7 @@
     height: 20px;
     width: 100%;
     z-index: 3;
-    
     font-size: inherit;
-    
     background: none;
     border: none;
 }
@@ -73,9 +70,7 @@
     width: 100%;
     max-width: 250px;
     z-index: 3;
-    
     pointer-events: none;
-    
     overflow: hidden;
 }
 
@@ -89,62 +84,77 @@
     color: rgb(0, 0, 0);
     text-shadow: 3px 3px rgb(0, 0, 0);
 }
+
 .text-1 {
     color: rgb(0, 0, 191);
     text-shadow: 3px 3px rgb(0, 0, 47);
 }
+
 .text-2 {
     color: rgb(0, 191, 0);
     text-shadow: 3px 3px rgb(0, 47, 0);
 }
+
 .text-3 {
     color: rgb(0, 191, 191);
     text-shadow: 3px 3px rgb(0, 47, 47);
 }
+
 .text-4 {
     color: rgb(191, 0, 0);
     text-shadow: 3px 3px rgb(47, 0, 0);
 }
+
 .text-5 {
     color: rgb(191, 0, 191);
     text-shadow: 3px 3px rgb(47, 0, 47);
 }
+
 .text-6 {
     color: rgb(191, 191, 0);
     text-shadow: 3px 3px rgb(47, 47, 0);
 }
+
 .text-7 {
     color: rgb(191, 191, 191);
     text-shadow: 3px 3px rgb(47, 47, 47);
 }
+
 .text-8 {
     color: rgb(64, 64, 64);
     text-shadow: 3px 3px rgb(16, 16, 16);
 }
+
 .text-9 {
     color: rgb(64, 64, 255);
     text-shadow: 3px 3px rgb(16, 16, 63);
 }
+
 .text-a {
     color: rgb(64, 255, 64);
     text-shadow: 3px 3px rgb(16, 63, 16);
 }
+
 .text-b {
     color: rgb(64, 255, 255);
     text-shadow: 3px 3px rgb(16, 63, 63);
 }
+
 .text-c {
     color: rgb(255, 64, 64);
     text-shadow: 3px 3px rgb(63, 16, 16);
 }
+
 .text-d {
     color: rgb(255, 64, 255);
     text-shadow: 3px 3px rgb(63, 16, 63);
 }
+
 .text-e {
     color: rgb(255, 255, 64);
     text-shadow: 3px 3px rgb(63, 63, 16);
 }
+
 .text-f {
     color: rgb(255, 255, 255);
     text-shadow: 3px 3px rgb(63, 63, 63);

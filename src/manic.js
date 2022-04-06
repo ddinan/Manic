@@ -1,21 +1,22 @@
-(function (manic) {
+(function(manic) {
     'use strict';
-    
+
     /* imports */
     var struct = manic.struct;
-    
+
     var connection, incomingBuffer = null;
-    
-    var levelData = null, levelArray = null;
-    
+
+    var levelData = null,
+        levelArray = null;
+
     var LoadingScreen;
-    
+
     function copyBytes(dest, pos, src, len) {
         (new Uint8Array(dest, pos, len)).set(new Uint8Array(src));
     }
-    
+
     /* Thanks to the Minecraft Coalition for protocol info: http://wiki.vg/Classic_Protocol */
-    
+
     /* packet IDs */
     var packetTypes = new manic.Enum({
         Identification: 0x00,
@@ -35,7 +36,7 @@
         DisconnectPlayer: 0x0e,
         UpdateUserType: 0x0f
     });
-    
+
     var packetFormats = {};
     packetFormats[packetTypes.Identification] = "BBssB";
     packetFormats[packetTypes.Ping] = "B";
@@ -53,7 +54,7 @@
     packetFormats[packetTypes.Message] = "Bbs";
     packetFormats[packetTypes.DisconnectPlayer] = "Bs";
     packetFormats[packetTypes.UpdateUserType] = "BB";
-    
+
     function sendPacket(type) {
         var args = Array.prototype.slice.call(arguments, 0),
             buf;
@@ -62,23 +63,28 @@
         connection.send(buf);
         console.log('Sent packet of type ' + packetTypes.getKey(type) + ': ' + args.slice(2))
     }
-    
+
     function byteAngleToRadians(byteAngle) {
         return byteAngle * (Math.PI * 2) / 255;
     }
+
     function radiansAngleToByte(radiansAngle) {
         radiansAngle = ((radiansAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
         return Math.floor(radiansAngle * 255 / (Math.PI * 2));
     }
+
     function shortPositionToFloat(shortPosition) {
         return shortPosition / 32;
     }
+
     function floatPositionToShort(floatPosition) {
         return Math.floor(floatPosition * 32);
     }
-    
-    var packetHandlers = {}, serverNameH = null, MOTDH = null;
-    packetHandlers[packetTypes.Identification] = function (type, version, serverName, MOTD, userType) {
+
+    var packetHandlers = {},
+        serverNameH = null,
+        MOTDH = null;
+    packetHandlers[packetTypes.Identification] = function(type, version, serverName, MOTD, userType) {
         serverNameH = document.createElement('h1');
         manic.GUI.formatText(serverNameH, serverName);
         MOTDH = document.createElement('h2');
@@ -87,48 +93,49 @@
         LoadingScreen.appendChild(MOTDH);
         console.log('You\'re ' + (userType === 0x64 ? '' : 'not') + ' an admin');
     };
-    
-    var chunkedLevelData = null, progressBar = null;
-    packetHandlers[packetTypes.LevelInitialize] = function () {
+
+    var chunkedLevelData = null,
+        progressBar = null;
+    packetHandlers[packetTypes.LevelInitialize] = function() {
         chunkedLevelData = [];
         progressBar = document.createElement('progress');
         progressBar.max = 100;
         progressBar.value = 0;
-        
+
         LoadingScreen.appendChild(progressBar);
     };
-    packetHandlers[packetTypes.LevelDataChunk] = function (type, length, chunk, progress) {
+    packetHandlers[packetTypes.LevelDataChunk] = function(type, length, chunk, progress) {
         if (length < 1024) {
             chunk = chunk.slice(0, length);
         }
         chunkedLevelData.push(chunk);
         progressBar.value = progress;
     };
-    
+
     var positionUpdateInterval = null;
-    packetHandlers[packetTypes.LevelFinalize] = function (type, xSize, ySize, zSize) {
+    packetHandlers[packetTypes.LevelFinalize] = function(type, xSize, ySize, zSize) {
         var length = 0;
         for (var i = 0; i < chunkedLevelData.length; i++) {
             length += chunkedLevelData[i].byteLength;
         }
-        
-        /* dechunk into a contiguous array */
+
+        /* Dechunk into a contiguous array */
         levelData = new ArrayBuffer(length);
         length = 0;
         for (var i = 0; i < chunkedLevelData.length; i++) {
             copyBytes(levelData, length, chunkedLevelData[i], chunkedLevelData[i].byteLength);
             length += chunkedLevelData[i].byteLength;
         }
-        
-        /* decompress */
+
+        /* Decompress */
         var unzip = new Zlib.Gunzip(new Uint8Array(levelData));
         levelArray = new Uint8Array(unzip.decompress());
-        
-        /* remove first 4 bytes (length is prefixed as Uint32 for some reason) */
+
+        /* Remove first 4 bytes (length is prefixed as Uint32 for some reason) */
         levelArray = levelArray.subarray(4);
-        
+
         manic.graphics.init(levelArray, xSize, ySize, zSize);
-        manic.GUI.init(function (msg) {
+        manic.GUI.init(function(msg) {
             var msgs = []
             while (msg.length > 64) {
                 msgs.push(msg.substr(0, 64));
@@ -139,12 +146,13 @@
                 sendPacket(packetTypes.Message, -1, msgs[i]);
             }
         });
-        var lastPosition = null, lastRotation = null;
-        positionUpdateInterval = window.setInterval(function () {
+        var lastPosition = null,
+            lastRotation = null;
+        positionUpdateInterval = window.setInterval(function() {
             var position = manic.graphics.getPosition(),
                 rotation = manic.graphics.getRotation();
-            if (lastPosition === null || (position[0] !== lastPosition[0] || position[1] !== lastPosition[1] || position[2] !== lastPosition[2])
-                || lastRotation === null || (rotation[0] !== lastRotation[0] || rotation[1] !== lastRotation[1] || rotation[2] !== lastRotation[2])) {
+            if (lastPosition === null || (position[0] !== lastPosition[0] || position[1] !== lastPosition[1] || position[2] !== lastPosition[2]) ||
+                lastRotation === null || (rotation[0] !== lastRotation[0] || rotation[1] !== lastRotation[1] || rotation[2] !== lastRotation[2])) {
                 sendPacket(
                     packetTypes.PositionOrientation,
                     -1,
@@ -154,20 +162,19 @@
                     radiansAngleToByte(-rotation[1]),
                     radiansAngleToByte(rotation[0])
                 );
-                
+
                 lastPosition = position;
                 lastRotation = rotation;
             }
         }, 200);
     };
-    packetHandlers[packetTypes.Message] = function (type, player, message) {
-        /* Negative players colour message yellow, don't ask me why */
+    packetHandlers[packetTypes.Message] = function(type, player, message) {
         if (player < 0) {
             message = '&e' + message;
         }
         manic.GUI.chatMessageReceived(message);
     };
-    packetHandlers[packetTypes.SpawnPlayer] = function (type, player, name, x, y, z, yaw, pitch) {
+    packetHandlers[packetTypes.SpawnPlayer] = function(type, player, name, x, y, z, yaw, pitch) {
         // Convert to float
         x = shortPositionToFloat(x);
         y = shortPositionToFloat(y);
@@ -180,10 +187,10 @@
             manic.graphics.setPositionRotation(x, y, z, pitch, -yaw, 0);
         }
     };
-    packetHandlers[packetTypes.ServerSetBlock] = function (type, x, y, z, id) {
+    packetHandlers[packetTypes.ServerSetBlock] = function(type, x, y, z, id) {
         manic.graphics.setBlockAndUpdateWorld(x, y, z, id);
     };
-    packetHandlers[packetTypes.PositionOrientation] = function (type, player, x, y, z, yaw, pitch) {
+    packetHandlers[packetTypes.PositionOrientation] = function(type, player, x, y, z, yaw, pitch) {
         // Convert to float
         x = shortPositionToFloat(x);
         y = shortPositionToFloat(y);
@@ -196,9 +203,11 @@
             manic.graphics.setPositionRotation(x, y, z, pitch, -yaw, 0);
         }
     };
-    
+
     function handlePackets() {
-        var pos = 0, byteBuffer = new Uint8Array(incomingBuffer), type, format, data, error = null;
+        var pos = 0,
+            byteBuffer = new Uint8Array(incomingBuffer),
+            type, format, data, error = null;
         while (pos < incomingBuffer.byteLength) {
             type = byteBuffer[pos];
             if (packetFormats.hasOwnProperty(type)) {
@@ -234,19 +243,19 @@
             throw error;
         }
     }
-    
-    window.onload = function () {
-        manic.graphics.preLoad(function () {
+
+    window.onload = function() {
+        manic.graphics.preLoad(function() {
             LoadingScreen = document.getElementById('gui');
             connection = new WebSocket("ws://localhost:25566/");
-            connection.onopen = function () {
+            connection.onopen = function() {
                 console.log('Connected');
                 sendPacket(packetTypes.Identification, 0x07, 'ajf', '--', 0);
             };
-            connection.onmessage = function (e) {
+            connection.onmessage = function(e) {
                 if (e.data instanceof Blob) {
                     var reader = new FileReader();
-                    reader.onloadend = function () {
+                    reader.onloadend = function() {
                         if (incomingBuffer === null) {
                             incomingBuffer = reader.result;
                         } else {
@@ -257,7 +266,7 @@
                         }
                         handlePackets();
                     };
-                    reader.onerror = function () {
+                    reader.onerror = function() {
                         throw new Error("FileReader errored, :panic:");
                     };
                     reader.readAsArrayBuffer(e.data);
@@ -265,10 +274,10 @@
                     console.log('Can\'t handle non-Blob data');
                 }
             };
-            connection.onerror = function () {
+            connection.onerror = function() {
                 console.log('Connection error');
             };
-            connection.onclose = function () {
+            connection.onclose = function() {
                 console.log('Connection close');
                 manic.graphics.deinit();
                 window.clearInterval(positionUpdateInterval);
@@ -277,8 +286,8 @@
             };
         });
     };
-    
-    window.onbeforeunload = function () {
+
+    window.onbeforeunload = function() {
         manic.graphics.deinit();
     };
 }(window.manic));
