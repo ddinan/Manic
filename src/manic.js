@@ -186,6 +186,8 @@
         if (player < 0) {
             manic.graphics.setPositionRotation(x, y, z, pitch, -yaw, 0);
         }
+
+        manic.graphics.addObject(player, x, y, z);
     };
     packetHandlers[packetTypes.ServerSetBlock] = function(type, x, y, z, id) {
         manic.graphics.setBlockAndUpdateWorld(x, y, z, id);
@@ -202,6 +204,14 @@
         if (player < 0) {
             manic.graphics.setPositionRotation(x, y, z, pitch, -yaw, 0);
         }
+    };
+    packetHandlers[packetTypes.PositionUpdate] = function(type, player, x, y, z) {
+        // Convert to float
+        x = shortPositionToFloat(x);
+        y = shortPositionToFloat(y);
+        z = shortPositionToFloat(z);
+
+        manic.graphics.moveObject(player, x, y, z);
     };
 
     function handlePackets() {

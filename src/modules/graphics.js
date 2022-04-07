@@ -571,6 +571,13 @@ window.manic.graphics = (function(manic) {
             }
         }
 
+        const ambientLight = new THREE.AmbientLight(0xcccccc);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(1, 1, 0.5).normalize();
+        scene.add(directionalLight);
+
         addBedrock(scene, xSize, ySize, zSize);
 
         var clock = new THREE.Clock();
@@ -659,6 +666,26 @@ window.manic.graphics = (function(manic) {
         callback();
     }
 
+    function addObject(name, x, y, z) {
+        console.log(x + " " + y + " " + z)
+        const geometry = new THREE.SphereGeometry(x, y, z);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0xffff00
+        });
+        const sphere = new THREE.Mesh(geometry, material);
+        //sphere.scale.set(0.5, 0.5, 0.5);
+        sphere.name = name + "_entity";
+        scene.add(sphere);
+    }
+
+    function moveObject(name, x, y, z) {
+        //console.log(x + " " + y + " " + z)
+        var object = scene.getObjectByName(name + "_entity");
+        //console.log(object.position.x + x + " " + object.position.y + y + " " + object.position.z + z)
+
+        object.position.set(object.position.x + x, object.position.y + y, object.position.z + z);
+    }
+
     /*function preLoad(callback) {
         texImage = THREE.ImageUtils.loadTexture(texFile, THREE.UVMapping, function() {
             callback();
@@ -674,6 +701,8 @@ window.manic.graphics = (function(manic) {
         setPositionRotation: setPositionRotation,
         getPosition: getPosition,
         getRotation: getRotation,
-        setBlockAndUpdateWorld: setBlockAndUpdateWorld
+        setBlockAndUpdateWorld: setBlockAndUpdateWorld,
+        addObject: addObject,
+        moveObject: moveObject
     };
 }(window.manic));
