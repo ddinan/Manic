@@ -61,7 +61,7 @@
         args.unshift(packetFormats[type]);
         buf = struct.buildPacket.apply(null, args);
         connection.send(buf);
-        console.log('Sent packet of type ' + packetTypes.getKey(type) + ': ' + args.slice(2))
+        //console.log('Sent packet of type ' + packetTypes.getKey(type) + ': ' + args.slice(2))
     }
 
     function byteAngleToRadians(byteAngle) {

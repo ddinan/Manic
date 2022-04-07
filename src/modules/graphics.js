@@ -95,7 +95,7 @@ window.manic.graphics = (function(manic) {
             isSpecialBlock(id));
     }
 
-    var texFile = 'terrain.png';
+    var texFile = 'assets/terrain.png';
     var texImage = null;
     var texTileSize = 16,
         texTileCount = 16;
@@ -272,10 +272,10 @@ window.manic.graphics = (function(manic) {
     var cachedFaceGeometries = faceDirections.map(function(direction, faceId) {
         var face = new THREE.PlaneGeometry(1, 1);
         var rotation = faceRotations[faceId];
-        face.applyMatrix(reusableMatrix.makeRotationX(rotation[0]));
-        face.applyMatrix(reusableMatrix.makeRotationY(rotation[1]));
-        face.applyMatrix(reusableMatrix.makeRotationZ(rotation[2]));
-        face.applyMatrix(reusableMatrix.makeTranslation(direction[0] / 2, direction[1] / 2, direction[2] / 2));
+        face.applyMatrix4(reusableMatrix.makeRotationX(rotation[0]));
+        face.applyMatrix4(reusableMatrix.makeRotationY(rotation[1]));
+        face.applyMatrix4(reusableMatrix.makeRotationZ(rotation[2]));
+        face.applyMatrix4(reusableMatrix.makeTranslation(direction[0] / 2, direction[1] / 2, direction[2] / 2));
         return face;
     });
 
@@ -283,7 +283,7 @@ window.manic.graphics = (function(manic) {
         return rotation * Math.PI / 2 + Math.PI / 4;
     }).map(function(rotation) {
         var face = new THREE.PlaneGeometry(1, 1);
-        face.applyMatrix(reusableMatrix.makeRotationY(rotation));
+        face.applyMatrix4(reusableMatrix.makeRotationY(rotation));
         return face;
     });
 
@@ -513,7 +513,7 @@ window.manic.graphics = (function(manic) {
         ySize = _ySize;
         zSize = _zSize;
 
-        // pixelated upscale, smooth downscale
+        // Pixelated upscale, smooth downscale
         texImage.magFilter = THREE.NearestFilter;
         texImage.minFilter = THREE.LinearFilter;
 
@@ -655,12 +655,17 @@ window.manic.graphics = (function(manic) {
     }
 
     function preLoad(callback) {
+        texImage = new THREE.TextureLoader().load(texFile);
+        callback();
+    }
+
+    /*function preLoad(callback) {
         texImage = THREE.ImageUtils.loadTexture(texFile, THREE.UVMapping, function() {
             callback();
         }, function() {
             alert("Failed to load texture");
         });
-    }
+    }*/
 
     return {
         preLoad: preLoad,
