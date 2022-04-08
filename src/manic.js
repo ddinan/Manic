@@ -206,10 +206,11 @@
         }
     };
     packetHandlers[packetTypes.PositionUpdate] = function(type, player, x, y, z) {
+        console.log("old: " + x + " " + y + " " + z);
         // Convert to float
-        x = shortPositionToFloat(x);
+        /*x = shortPositionToFloat(x);
         y = shortPositionToFloat(y) + 0.6875; // Slightly offset Y value to make it more accurate
-        z = shortPositionToFloat(z);
+        z = shortPositionToFloat(z);*/
 
         manic.graphics.moveObject(player, x, y, z);
     };

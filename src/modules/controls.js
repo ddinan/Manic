@@ -263,7 +263,6 @@ THREE.FirstPersonControls = function(object, domElement) {
 
         if (this.constrainVertical) {
             verticalLookRatio = Math.PI / (this.verticalMax - this.verticalMin);
-
         }
 
         this.lon += this.mouseX * actualLookSpeed;

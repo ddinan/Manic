@@ -669,23 +669,43 @@ window.manic.graphics = (function(manic) {
     }
 
     function addObject(name, x, y, z) {
-        console.log(x + " " + y + " " + z)
-        const geometry = new THREE.SphereGeometry(x, y, z);
+        console.log("spawned " + name + ": " + x + " " + y - 3 + " " + z)
+        const geometry = new THREE.SphereGeometry(1, 64, 32, 0, 6.283185307179586, 0, Math.PI);
         const material = new THREE.MeshBasicMaterial({
             color: 0xffff00
         });
+
+        // radius : Float, widthSegments : Integer, heightSegments : Integer, phiStart : Float, phiLength : Float, thetaStart : Float, thetaLength : Float
         const sphere = new THREE.Mesh(geometry, material);
-        //sphere.scale.set(0.5, 0.5, 0.5);
         sphere.name = name + "_entity";
+        sphere.position.set(x, y - 3, z);
+
         scene.add(sphere);
     }
 
     function moveObject(name, x, y, z) {
-        //console.log(x + " " + y + " " + z)
+        console.log(x + " " + y + " " + z)
         var object = scene.getObjectByName(name + "_entity");
         //console.log(object.position.x + x + " " + object.position.y + y + " " + object.position.z + z)
 
+        // Ratio is 1 : 3125 (pixel : float position)
+        // 1 / 3125 = 0.00032
+
+        x /= 3125;
+        y /= 3125;
+        z /= 3125;
+
+        // Multiply by 32
+
+        x *= 32;
+        y *= 32;
+        z *= 32;
+
+        console.log("new " + x + " " + y + " " + z)
+
         object.position.set(object.position.x + x, object.position.y + y, object.position.z + z);
+
+        console.log("spherepos " + object.position.x + " " + object.position.y + " " + object.position.z);
     }
 
     /*function preLoad(callback) {
