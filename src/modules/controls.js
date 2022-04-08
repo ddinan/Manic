@@ -4,6 +4,8 @@ THREE.FirstPersonControls = function(object, domElement) {
 
     this.domElement = (domElement !== undefined) ? domElement : document;
 
+    this.debug = false;
+
     this.movementSpeed = 5;
     this.lookSpeed = 0.005;
 
@@ -164,6 +166,15 @@ THREE.FirstPersonControls = function(object, domElement) {
             case 17:
                 /* Control */
                 this.movementSpeed = 10;
+                break;
+            case 114:
+                /* F3 */
+                event.preventDefault(); // Disable browser shortcuts
+                this.debug = !this.debug;
+
+                var debugMenu = document.getElementById('debugMenu');
+                if (this.debug) debugMenu.style.zIndex = '2'; // Show menu
+                else debugMenu.style.zIndex = '0'; // Hide menu
                 break;
         }
     };

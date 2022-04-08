@@ -122,6 +122,7 @@ window.manic.GUI = (function(manic) {
     function drawDebugMenu() {
         debug = document.createElement('div');
         debug.id = 'debugMenu';
+        debug.style.zIndex = '0'; // Hidden by default
 
         var coords = document.createElement('p')
         coords.id = 'coords';
