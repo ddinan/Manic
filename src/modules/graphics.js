@@ -588,9 +588,11 @@ window.manic.graphics = (function(manic) {
             }
             requestAnimationFrame(render);
 
+            manic.GUI.updateDebugMenu(camera.position.x, camera.position.y, camera.position.z);
+
             controls.update(clock.getDelta());
 
-            // hide chunks behind fog
+            // Hide chunks behind fog
             if (fog) {
                 var playerX = camera.position.x,
                     playerZ = camera.position.z;

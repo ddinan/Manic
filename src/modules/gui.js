@@ -1,10 +1,8 @@
 window.manic.GUI = (function(manic) {
     'use strict';
 
-    var chatOpen = false,
-        cursor = null,
-        chatlog = null,
-        chatbox = null;
+    var chatOpen = false;
+    var chatbox, chatlog, cursor, debug = null;
 
     function drawPauseMenu() {
         let container = document.createElement('div');
@@ -121,9 +119,32 @@ window.manic.GUI = (function(manic) {
         thead.appendChild(row);
     }
 
+    function drawDebugMenu() {
+        debug = document.createElement('div');
+        debug.id = 'debugMenu';
+
+        var coords = document.createElement('p')
+        coords.id = 'coords';
+        coords.innerText = 'XYZ: -';
+
+        debug.appendChild(coords);
+        document.body.appendChild(debug);
+    }
+
+    function updateDebugMenu(x, y, z) {
+        var coords = document.getElementById('coords');
+
+        x = Math.floor(x);
+        y = Math.floor(y - 1.5975); // Not exact but close enough to CC client
+        z = Math.floor(z);
+
+        coords.innerText = 'XYZ: ' + x + ', ' + y + ', ' + z;
+    }
+
     function init(sendMessage) {
         drawPauseMenu();
         drawHotbar();
+        drawDebugMenu();
 
         // Cursor
         cursor = document.createElement('img');
@@ -202,6 +223,7 @@ window.manic.GUI = (function(manic) {
     return {
         init: init,
         formatText: formatText,
-        chatMessageReceived: chatMessageReceived
+        chatMessageReceived: chatMessageReceived,
+        updateDebugMenu: updateDebugMenu
     };
 }(window.manic));

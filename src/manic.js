@@ -177,7 +177,7 @@
     packetHandlers[packetTypes.SpawnPlayer] = function(type, player, name, x, y, z, yaw, pitch) {
         // Convert to float
         x = shortPositionToFloat(x);
-        y = shortPositionToFloat(y);
+        y = shortPositionToFloat(y) + 0.6875; // Slightly offset Y value to make it more accurate
         z = shortPositionToFloat(z);
         // Convert to radians
         yaw = byteAngleToRadians(yaw);
@@ -195,7 +195,7 @@
     packetHandlers[packetTypes.PositionOrientation] = function(type, player, x, y, z, yaw, pitch) {
         // Convert to float
         x = shortPositionToFloat(x);
-        y = shortPositionToFloat(y);
+        y = shortPositionToFloat(y) + 0.6875; // Slightly offset Y value to make it more accurate
         z = shortPositionToFloat(z);
         // Convert to radians
         yaw = byteAngleToRadians(yaw);
@@ -208,7 +208,7 @@
     packetHandlers[packetTypes.PositionUpdate] = function(type, player, x, y, z) {
         // Convert to float
         x = shortPositionToFloat(x);
-        y = shortPositionToFloat(y);
+        y = shortPositionToFloat(y) + 0.6875; // Slightly offset Y value to make it more accurate
         z = shortPositionToFloat(z);
 
         manic.graphics.moveObject(player, x, y, z);
