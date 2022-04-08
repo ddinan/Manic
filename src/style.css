@@ -3,6 +3,10 @@
     src: url('/assets/hud.ttf');
 }
 
+* {
+    cursor: none;
+}
+
 .hidden {
     display: none;
 }
@@ -191,4 +195,16 @@ table {
 th, td {
     padding: 10px 20px;
     border: 5px solid #424242;
+}
+
+/* Cursor */
+#cursor {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    position: fixed;
+    z-index: 3;
+    width: 64px;
 }

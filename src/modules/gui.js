@@ -2,6 +2,7 @@ window.manic.GUI = (function(manic) {
     'use strict';
 
     var chatOpen = false,
+        cursor = null,
         chatlog = null,
         chatbox = null;
 
@@ -55,6 +56,13 @@ window.manic.GUI = (function(manic) {
 
     function init(sendMessage) {
         drawHotbar();
+
+        // Cursor
+        cursor = document.createElement('img');
+        cursor.src = './assets/cursor.png';
+        cursor.id = 'cursor';
+        document.body.appendChild(cursor);
+
         // Chat logs
         chatlog = document.createElement('div');
         chatlog.id = 'chatlog';
