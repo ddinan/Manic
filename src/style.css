@@ -53,7 +53,7 @@
     margin-left: -100px;
 }
 
-/* In-game overlay */
+/* Chat overlay */
 #chatbox {
     font-family: 'hud';
     position: fixed;
@@ -169,4 +169,26 @@
 .text-f {
     color: rgb(255, 255, 255);
     text-shadow: 3px 3px rgb(63, 63, 63);
+}
+
+/* Hotbar */
+#hotbar {
+    z-index: 3;
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    background: #282828eb;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 10px 20px;
+    border: 5px solid #424242;
 }
