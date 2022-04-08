@@ -4,7 +4,7 @@ THREE.FirstPersonControls = function(object, domElement) {
 
     this.domElement = (domElement !== undefined) ? domElement : document;
 
-    this.movementSpeed = 1.0;
+    this.movementSpeed = 5;
     this.lookSpeed = 0.005;
 
     this.lookVertical = true;
@@ -153,6 +153,14 @@ THREE.FirstPersonControls = function(object, domElement) {
                 /* Spacebar */
                 this.moveUp = false;
                 break;
+            case 16:
+                /* Shift */
+                this.movementSpeed = 20;
+                break;
+            case 17:
+                /* Control */
+                this.movementSpeed = 10;
+                break;
         }
     };
 
@@ -193,6 +201,14 @@ THREE.FirstPersonControls = function(object, domElement) {
             case 32:
                 /* Spacebar */
                 this.moveUp = false;
+                break;
+            case 16:
+                /* Shift */
+                this.movementSpeed = 5;
+                break;
+            case 17:
+                /* Crouch */
+                this.movementSpeed = 5;
                 break;
         }
     };
