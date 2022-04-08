@@ -6,6 +6,77 @@ window.manic.GUI = (function(manic) {
         chatlog = null,
         chatbox = null;
 
+    function drawPauseMenu() {
+        let container = document.createElement('div');
+        container.id = 'pauseMenu';
+        container.style.zIndex = '0'; // Hidden by default
+
+        let character = document.createElement('div');
+        character.classList.add('character');
+
+        container.appendChild(character);
+
+        let img = document.createElement('img');
+        img.src = 'https://i.imgur.com/RAnLDIS.png';
+
+        character.appendChild(img);
+
+        let buttons = document.createElement('div');
+        buttons.classList.add('buttons');
+
+        let heading = document.createElement('h1');
+        heading.innerText = 'Pause menu';
+
+        buttons.appendChild(heading);
+        buttons.appendChild(document.createElement('br'));
+        buttons.appendChild(document.createElement('br'));
+
+        let resumeButton = document.createElement('button');
+        resumeButton.id = 'resumeButton';
+        resumeButton.innerText = 'Resume';
+
+        buttons.appendChild(resumeButton);
+        buttons.appendChild(document.createElement('br'));
+        buttons.appendChild(document.createElement('br'));
+
+        let buttonsShort = document.createElement('div');
+        buttonsShort.classList.add('buttons-short');
+
+        let optionsButton = document.createElement('button');
+        optionsButton.id = 'optionsButton';
+        optionsButton.innerText = 'Options';
+
+        buttonsShort.appendChild(optionsButton);
+
+        let controlsButton = document.createElement('button');
+        controlsButton.id = 'controlsButton';
+        controlsButton.innerText = 'Controls';
+
+        buttonsShort.appendChild(controlsButton);
+
+        buttons.appendChild(buttonsShort);
+        buttons.appendChild(document.createElement('br'));
+        buttons.appendChild(document.createElement('br'));
+
+        let changeTexturesButton = document.createElement('button');
+        changeTexturesButton.id = 'changeTexturesButton';
+        changeTexturesButton.innerText = 'Change texture pack';
+
+        buttons.appendChild(changeTexturesButton);
+        buttons.appendChild(document.createElement('br'));
+        buttons.appendChild(document.createElement('br'));
+
+        let mainMenuButton = document.createElement('button');
+        mainMenuButton.id = 'mainMenuButton';
+        mainMenuButton.innerText = 'Main menu';
+
+        buttons.appendChild(mainMenuButton);
+
+        container.appendChild(buttons);
+
+        document.body.appendChild(container);
+    }
+
     function drawHotbar() {
         let table = document.createElement('table');
         table.id = 'hotbar';
@@ -17,10 +88,6 @@ window.manic.GUI = (function(manic) {
 
         document.body.appendChild(table);
 
-        addHotbarData(thead);
-    }
-
-    function addHotbarData(thead) {
         let row = document.createElement('tr');
         let slot1 = document.createElement('th');
         slot1.innerHTML = "1";
@@ -55,6 +122,7 @@ window.manic.GUI = (function(manic) {
     }
 
     function init(sendMessage) {
+        drawPauseMenu();
         drawHotbar();
 
         // Cursor

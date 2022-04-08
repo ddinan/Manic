@@ -3,7 +3,7 @@
     src: url('/assets/hud.ttf');
 }
 
-* {
+body {
     cursor: none;
 }
 
@@ -55,6 +55,62 @@
     width: 200px;
     height: 4px;
     margin-left: -100px;
+}
+
+/* Pause menu */
+#pauseMenu {
+    cursor: default;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    background: #00000060;
+    display: grid;
+    grid-template-columns: 50% 50% 2fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+}
+
+.character {
+    padding: 100px;
+    border: 1px solid red;
+}
+
+.character img {
+    width: 25%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: block;
+    margin: auto;
+}
+
+.buttons {
+    text-align: center;
+    padding: 100px;
+    border: 1px solid blue;
+}
+
+.buttons button {
+    width: 100%;
+}
+
+#optionsButton {
+    float: left;
+    width: 50%;
+}
+
+#controlsButton {
+    float: right;
+    width: 50%;
+}
+
+html, body, .container {
+    height: 100%;
+    margin: 0;
 }
 
 /* Chat overlay */

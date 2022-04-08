@@ -112,6 +112,10 @@ THREE.FirstPersonControls = function(object, domElement) {
             case 27:
                 /* Esc */
                 this.freeze = !this.freeze;
+
+                var pauseMenu = document.getElementById('pauseMenu');
+                if (this.freeze) pauseMenu.style.zIndex = '4'; // Render menu above other items
+                else pauseMenu.style.zIndex = '0'; // Hide menu
                 break;
             case 84:
                 /* T */
