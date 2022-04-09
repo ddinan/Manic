@@ -119,6 +119,8 @@ window.manic.GUI = (function(manic) {
         thead.appendChild(row);
     }
 
+    var stats = new Stats();
+
     function drawDebugMenu() {
         debug = document.createElement('div');
         debug.id = 'debugMenu';
@@ -130,6 +132,10 @@ window.manic.GUI = (function(manic) {
 
         debug.appendChild(coords);
         document.body.appendChild(debug);
+
+        // Show stats counter
+        stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+        debug.appendChild(stats.domElement);
     }
 
     function updateDebugMenu(x, y, z) {
@@ -140,6 +146,10 @@ window.manic.GUI = (function(manic) {
         z = Math.floor(z);
 
         coords.innerText = 'XYZ: ' + x + ', ' + y + ', ' + z;
+
+        // Stats tick
+        stats.begin();
+        stats.end();
     }
 
     function init(sendMessage) {
